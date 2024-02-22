@@ -10,6 +10,7 @@ import toolState from "../store/toolState";
 
 const Toolbar = () => {
   const changeColor = (e) => {
+    toolState.setStrokeColor(e.target.value);
     toolState.setFillColor(e.target.value);
   };
 
@@ -17,21 +18,37 @@ const Toolbar = () => {
     const dataUrl = canvasState.toDataURL();
     const a = document.createElement("a");
     a.href = dataUrl;
-    a.download = canvasState.sessionId + ".jpeg";
+    a.download = canvasState.sessionid + ".jpeg";
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild();
+    document.body.removeChild(a);
   };
 
   return (
     <div className="toolbar">
       <button
         className="toolbar__btn brush"
-        onClick={() => toolState.setTool(new Brush(canvasState.canvas))}
+        onClick={() =>
+          toolState.setTool(
+            new Brush(
+              canvasState.canvas,
+              canvasState.socket,
+              canvasState.sessionid,
+            ),
+          )
+        }
       ></button>
       <button
         className="toolbar__btn rect"
-        onClick={() => toolState.setTool(new Rect(canvasState.canvas))}
+        onClick={() =>
+          toolState.setTool(
+            new Rect(
+              canvasState.canvas,
+              canvasState.socket,
+              canvasState.sessionid,
+            ),
+          )
+        }
       ></button>
       <button
         className="toolbar__btn circle"

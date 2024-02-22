@@ -1,4 +1,4 @@
-import Tool from './Tool';
+import Tool from "./Tool";
 
 export default class Line extends Tool {
   constructor(canvas) {
@@ -6,6 +6,8 @@ export default class Line extends Tool {
     this.listen();
   }
   lineArray = [];
+  drawMode = true;
+
   listen() {
     this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
     this.canvas.onmousedown = this.mouseDownHandler.bind(this);
@@ -13,36 +15,33 @@ export default class Line extends Tool {
   }
 
   mouseUpHandler(e) {
-    this.mouseDown = false;
+    this.drawMode = true;
   }
 
   mouseDownHandler(e) {
-    if (this.startX) {
-      this.ctx.beginPath();
-      this.ctx.moveTo(this.startX, this.startY);
-      this.ctx.lineTo(
-        e.pageX - e.target.offsetLeft,
-        e.pageY - e.target.offsetTop
-      );
+    this.currentX = e.pageX - e.target.offsetLeft;
+    this.currentY = e.pageY - e.target.offsetTop;
+    this.ctx.moveTo(this.currentX, this.currentY);
+    if (this.drawMode) {
+      this.saved = this.canvas.toDataURL();
     }
-    this.mouseDown = true;
-    this.startX = e.pageX - e.target.offsetLeft;
-    this.startY = e.pageY - e.target.offsetTop;
   }
   mouseMoveHandler(e) {
-    if (this.mouseDown) {
-      this.draw(
-        this.startX - e.target.offsetLeft,
-        this.startY - e.target.offsetTop
-      );
+    if (this.drawMode) {
+      this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop);
     }
   }
+
   draw(x, y) {
     const img = new Image();
     img.src = this.saved;
-    this.ctx.beginPath();
-    this.ctx.lineTo(x, y);
-    this.ctx.fill();
-    this.ctx.stroke();
+    img.onload = async function () {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.currentX, this.currentY);
+      this.ctx.lineTo(x, y);
+      this.ctx.stroke();
+    }.bind(this);
   }
 }

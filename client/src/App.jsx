@@ -2,7 +2,7 @@ import Canvas from "./components/Canvas";
 import SettingsBar from "./components/SettingsBar";
 import Toolbar from "./components/ToolBar";
 import "./styles/app.scss";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 const App = () => {
   return (
@@ -13,7 +13,7 @@ const App = () => {
           element={
             <div className="app">
               <Toolbar />
-              <SettingBar />
+              <SettingsBar />
               <Canvas />
             </div>
           }
@@ -23,7 +23,7 @@ const App = () => {
           element={
             <div className="app">
               <Toolbar />
-              <SettingBar />
+              <SettingsBar />
               <Canvas />
               <Navigate to={`/f${(+new Date()).toString(16)}`} replace />
             </div>

@@ -17,6 +17,7 @@ export default class Brush extends Tool {
     this.socket.send(
       JSON.stringify({
         method: "draw",
+        id: this.id,
         figure: {
           type: "finish",
         },
@@ -33,10 +34,11 @@ export default class Brush extends Tool {
   }
   mouseMoveHandler(e) {
     if (this.mouseDown) {
-      //   this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop);
+      // this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
       this.socket.send(
         JSON.stringify({
           method: "draw",
+          id: this.id,
           figure: {
             type: "brush",
             x: e.pageX - e.target.offsetLeft,
@@ -46,6 +48,7 @@ export default class Brush extends Tool {
       );
     }
   }
+
   static draw(ctx, x, y) {
     ctx.lineTo(x, y);
     ctx.stroke();

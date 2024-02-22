@@ -1,10 +1,11 @@
 import "../styles/canvas.scss";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
 import canvasState from "../store/canvasState";
 import toolState from "../store/toolState";
 import Brush from "../tools/Brush";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Canvas = observer(() => {
   const canvasRef = useRef();
@@ -15,13 +16,36 @@ const Canvas = observer(() => {
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
+    let ctx = canvasRef.current.getContext("2d");
+    axios
+      .get(`http://localhost:3001/image?id=${params.id}`)
+      .then((response) => {
+        const img = new Image();
+        img.src = response.data;
+        img.onload = () => {
+          ctx.clearRect(
+            0,
+            0,
+            canvasRef.current.width,
+            canvasRef.current.height,
+          );
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            canvasRef.current.width,
+            canvasRef.current.height,
+          );
+        };
+      });
   }, []);
 
   useEffect(() => {
     if (canvasState.username) {
-      const socket = new WebSocket("ws://localhost:5000/");
+      const socket = new WebSocket("ws://localhost:3001/");
       canvasState.setSocket(socket);
       canvasState.setSessionId(params.id);
+      console.log("front ПОДКЛЮЧЕНИЕ");
       toolState.setTool(
         new Brush(canvasRef.current, socket, params.id, socket, params.id),
       );
@@ -46,7 +70,7 @@ const Canvas = observer(() => {
         }
       };
     }
-  }, []);
+  }, [canvasState.username]);
 
   const drawHandler = () => {
     const figure = msg.figure;
@@ -82,34 +106,28 @@ const Canvas = observer(() => {
 
   return (
     <div className="canvas">
-      <div
-        class="modal"
-        tabindex="-1"
-        role="dialog"
-        show={modal}
-        onHide={() => {}}
-      >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Input name</h5>
+      <div className="modal" tabindex="-1" role="dialog">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Input name</h5>
               <button
                 type="button"
-                class="close"
+                className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true">123</span>
               </button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <input type="text" ref={usernameRef} />
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 onClick={() => connectionHandler()}
                 type="button"
-                class="btn btn-primary"
+                className="btn btn-primary"
               >
                 Enter
               </button>

@@ -41,7 +41,7 @@ export default class Rect extends Tool {
       let currentY = e.pageY - e.target.offsetTop;
       this.width = currentX - this.startX;
       this.height = currentY - this.startY;
-      this.draw(this.startX, this.startY, this.width, this.height);
+      this.rectDraw(this.startX, this.startY, this.width, this.height);
     }
   }
   static rectDraw(ctx, x, y, w, h, color) {
