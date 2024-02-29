@@ -7,13 +7,11 @@ import Circle from "../tools/Circle";
 import EmptyCircle from "../tools/EmptyCircle";
 import canvasState from "../store/canvasState";
 import toolState from "../store/toolState";
+import { useEffect } from "react";
+import { set } from "mobx";
 
 const Toolbar = () => {
-  const changeColor = (e) => {
-    toolState.setStrokeColor(e.target.value);
-    toolState.setFillColor(e.target.value);
-  };
-
+  useEffect(() => {}, []);
   const download = () => {
     const dataUrl = canvasState.toDataURL();
     const a = document.createElement("a");
@@ -24,55 +22,67 @@ const Toolbar = () => {
     document.body.removeChild(a);
   };
 
+  const setRect = () => {
+    toolState.setTool(
+      new Rect(canvasState.canvas, canvasState.socket, canvasState.sessionid),
+    );
+    toolState.setStrokeColor(document.getElementById("strokecolor").value);
+  };
+
+  const setCircle = () => {
+    toolState.setTool(
+      new Circle(canvasState.canvas, canvasState.socket, canvasState.sessionid),
+    );
+    toolState.setStrokeColor(document.getElementById("strokecolor").value);
+  };
+
+  const setEmptyCircle = () => {
+    toolState.setTool(
+      new EmptyCircle(
+        canvasState.canvas,
+        canvasState.socket,
+        canvasState.sessionid,
+      ),
+    );
+    toolState.setStrokeColor(document.getElementById("strokecolor").value);
+  };
+
+  const setBrush = () => {
+    toolState.setTool(
+      new Brush(canvasState.canvas, canvasState.socket, canvasState.sessionid),
+    );
+    toolState.setStrokeColor(document.getElementById("strokecolor").value);
+  };
+  const setEraser = () => {
+    toolState.setTool(
+      new Eraser(canvasState.canvas, canvasState.socket, canvasState.sessionid),
+    );
+    toolState.setStrokeColor("white");
+  };
+
   return (
     <div className="toolbar">
-      <button
-        className="toolbar__btn brush"
-        onClick={() =>
-          toolState.setTool(
-            new Brush(
-              canvasState.canvas,
-              canvasState.socket,
-              canvasState.sessionid,
-            ),
-          )
-        }
-      ></button>
-      <button
-        className="toolbar__btn rect"
-        onClick={() =>
-          toolState.setTool(
-            new Rect(
-              canvasState.canvas,
-              canvasState.socket,
-              canvasState.sessionid,
-            ),
-          )
-        }
-      ></button>
-      <button
-        className="toolbar__btn circle"
-        onClick={() => toolState.setTool(new Circle(canvasState.canvas))}
-      ></button>
+      <button className="toolbar__btn brush" onClick={setBrush}></button>
+      <button className="toolbar__btn rect" onClick={setRect}></button>
+      <button className="toolbar__btn circle" onClick={setCircle}></button>
       <button
         className="toolbar__btn emptyCircle"
-        onClick={() => toolState.setTool(new EmptyCircle(canvasState.canvas))}
+        onClick={setEmptyCircle}
       ></button>
-      <button
-        className="toolbar__btn eraser"
-        onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}
-      ></button>
+      <button className="toolbar__btn eraser" onClick={setEraser}></button>
 
       <button
         className="toolbar__btn "
-        onClick={() => toolState.setTool(new Line(canvasState.canvas))}
+        onClick={() =>
+          toolState.setTool(
+            new Line(
+              canvasState.canvas,
+              canvasState.socket,
+              canvasState.sessionid,
+            ),
+          )
+        }
       ></button>
-
-      <input
-        type="color"
-        style={{ marginLeft: 10 }}
-        onChange={(e) => changeColor(e)}
-      />
 
       <button
         className="toolbar__btn undo"

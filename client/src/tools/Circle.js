@@ -1,8 +1,8 @@
-import Tool from './Tool';
+import Tool from "./Tool";
 
 export default class Circle extends Tool {
-  constructor(canvas) {
-    super(canvas);
+  constructor(canvas, socket, id) {
+    super(canvas, socket, id);
     this.listen();
   }
 
@@ -14,6 +14,20 @@ export default class Circle extends Tool {
 
   mouseUpHandler(e) {
     this.mouseDown = false;
+    this.socket.send(
+      JSON.stringify({
+        method: "draw",
+        id: this.id,
+        figure: {
+          type: "circle",
+          x: this.startX,
+          y: this.startY,
+          r: this.radius,
+          color: this.ctx.fillStyle,
+          stroke: this.ctx.strokeStyle,
+        },
+      }),
+    );
   }
   mouseDownHandler(e) {
     this.mouseDown = true;
@@ -26,18 +40,12 @@ export default class Circle extends Tool {
     if (this.mouseDown) {
       let curentX = e.pageX - e.target.offsetLeft;
       let curentY = e.pageY - e.target.offsetTop;
-      let width = curentX - this.startX;
-      let height = curentY - this.startY;
-      let r = Math.sqrt(width ** 2 + height ** 2);
-      this.draw(this.startX, this.startY, r);
+      this.width = curentX - this.startX;
+      this.height = curentY - this.startY;
+      this.radius = Math.sqrt(this.width ** 2 + this.height ** 2);
+      this.draw(this.startX, this.startY, this.radius);
     }
   }
-
-  cutCircle = (context, x, y, radius) => {
-    context.globalCompositeOperation = 'destination-out';
-    context.arc(x, y, Math.abs(radius), 0, Math.PI * 2, true);
-    context.fill();
-  };
 
   draw(x, y, r) {
     const img = new Image();
@@ -50,5 +58,14 @@ export default class Circle extends Tool {
       this.ctx.fill();
       this.ctx.stroke();
     }.bind(this);
+  }
+
+  static circleDraw(ctx, x, y, r, color, stroke) {
+    ctx.strokeStyle = stroke;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
   }
 }

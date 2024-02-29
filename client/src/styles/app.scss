@@ -1,10 +1,9 @@
 @import "./variables";
 
 * {
-  margin:0;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 .app {
@@ -12,4 +11,9 @@
   max-height: 100vh;
   width: 100vw;
   background-color: $background-color;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
 }

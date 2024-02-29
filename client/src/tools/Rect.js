@@ -17,6 +17,7 @@ export default class Rect extends Tool {
     this.socket.send(
       JSON.stringify({
         method: "draw",
+        id: this.id,
         figure: {
           type: "rect",
           x: this.startX,
@@ -24,6 +25,7 @@ export default class Rect extends Tool {
           width: this.width,
           height: this.height,
           color: this.ctx.fillStyle,
+          stroke: this.ctx.strokeStyle,
         },
       }),
     );
@@ -41,10 +43,25 @@ export default class Rect extends Tool {
       let currentY = e.pageY - e.target.offsetTop;
       this.width = currentX - this.startX;
       this.height = currentY - this.startY;
-      this.rectDraw(this.startX, this.startY, this.width, this.height);
+      this.draw(this.startX, this.startY, this.width, this.height);
     }
   }
-  static rectDraw(ctx, x, y, w, h, color) {
+
+  draw(x, y, w, h) {
+    const img = new Image();
+    img.src = this.saved;
+    img.onload = () => {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.beginPath();
+      this.ctx.rect(x, y, w, h);
+      this.ctx.fill();
+      this.ctx.stroke();
+    };
+  }
+
+  static rectDraw(ctx, x, y, w, h, color, stroke) {
+    ctx.strokeStyle = stroke;
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.rect(x, y, w, h);

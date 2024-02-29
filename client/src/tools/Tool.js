@@ -14,6 +14,10 @@ export default class Tool {
     this.ctx.strokeStyle = color;
   }
 
+  get getLineWidth() {
+    return this.ctx.lineWidth;
+  }
+
   set lineWidth(width) {
     this.ctx.lineWidth = width;
   }
