@@ -1,5 +1,5 @@
-import toolState from '../store/toolState';
-import '../styles/toolbar.scss';
+import toolState from "../store/toolState";
+import "../styles/toolbar.scss";
 
 const SettingsBar = () => {
   return (
@@ -21,8 +21,19 @@ const SettingsBar = () => {
       </label>
       <input
         type="color"
+        id="strokecolor"
         onChange={(e) => toolState.setStrokeColor(e.target.value)}
         style={{ marginLeft: 5 }}
+      />
+      <label style={{ marginLeft: 10 }} htmlFor="line-width">
+        Fill color:
+      </label>
+
+      <input
+        id="fillcolor"
+        type="color"
+        style={{ marginLeft: 5 }}
+        onChange={(e) => toolState.setFillColor(e.target.value)}
       />
     </div>
   );

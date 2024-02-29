@@ -25,7 +25,8 @@ const App = () => {
               <Toolbar />
               <SettingsBar />
               <Canvas />
-              <Navigate to={`/f${(+new Date()).toString(16)}`} replace />
+              {/*<Navigate to={`/f${(+new Date()).toString(16)}`} replace />*/}
+              <Navigate to={"f18de3fd47ba"} />
             </div>
           }
         />
