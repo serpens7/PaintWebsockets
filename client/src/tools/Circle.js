@@ -22,9 +22,10 @@ export default class Circle extends Tool {
           type: "circle",
           x: this.startX,
           y: this.startY,
-          r: this.radius,
+          radius: this.radius,
           color: this.ctx.fillStyle,
           stroke: this.ctx.strokeStyle,
+          lineWidth: this.ctx.lineWidth,
         },
       }),
     );
@@ -50,21 +51,22 @@ export default class Circle extends Tool {
   draw(x, y, r) {
     const img = new Image();
     img.src = this.saved;
-    img.onload = async function () {
+    img.onload = () => {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
       this.ctx.beginPath();
       this.ctx.arc(x, y, r, 0, 2 * Math.PI);
       this.ctx.fill();
       this.ctx.stroke();
-    }.bind(this);
+    };
   }
 
-  static circleDraw(ctx, x, y, r, color, stroke) {
+  static circleDraw(ctx, x, y, radius, color, stroke, lineWidth) {
     ctx.strokeStyle = stroke;
     ctx.fillStyle = color;
+    ctx.lineWidth = lineWidth;
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
+    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
     ctx.fill();
     ctx.stroke();
   }

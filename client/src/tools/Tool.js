@@ -10,6 +10,7 @@ export default class Tool {
   set fillColor(color) {
     this.ctx.fillStyle = color;
   }
+
   set strokeColor(color) {
     this.ctx.strokeStyle = color;
   }
@@ -18,8 +19,8 @@ export default class Tool {
     return this.ctx.lineWidth;
   }
 
-  set lineWidth(width) {
-    this.ctx.lineWidth = width;
+  set lineWidth(lineWidth) {
+    this.ctx.lineWidth = lineWidth;
   }
 
   destroyEvents() {

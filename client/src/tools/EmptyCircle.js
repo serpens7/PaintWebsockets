@@ -16,7 +16,7 @@ export default class EmptyCircle extends Circle {
           type: "emptyCircle",
           x: this.startX,
           y: this.startY,
-          r: this.radius,
+          radius: this.radius,
           stroke: this.ctx.strokeStyle,
         },
       }),
@@ -26,18 +26,18 @@ export default class EmptyCircle extends Circle {
   draw(x, y, r) {
     const img = new Image();
     img.src = this.saved;
-    img.onload = async function () {
+    img.onload = () => {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
       this.ctx.beginPath();
       this.ctx.arc(x, y, r, 0, 2 * Math.PI);
       this.ctx.stroke();
-    }.bind(this);
+    };
   }
-  static emptyCircleDraw(ctx, x, y, r, stroke) {
+  static emptyCircleDraw(ctx, x, y, radius, stroke) {
     ctx.strokeStyle = stroke;
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
     ctx.stroke();
   }
 }

@@ -19,8 +19,8 @@ class ToolState {
   setStrokeColor(color) {
     this.tool.strokeColor = color;
   }
-  setLineWidth(width) {
-    this.tool.lineWidth = width;
+  setLineWidth(lineWidth) {
+    this.tool.lineWidth = lineWidth;
   }
 }
 

@@ -8,12 +8,11 @@ import EmptyCircle from "../tools/EmptyCircle";
 import canvasState from "../store/canvasState";
 import toolState from "../store/toolState";
 import { useEffect } from "react";
-import { set } from "mobx";
 
 const Toolbar = () => {
   useEffect(() => {}, []);
   const download = () => {
-    const dataUrl = canvasState.toDataURL();
+    const dataUrl = canvasState.canvas.toDataURL();
     const a = document.createElement("a");
     a.href = dataUrl;
     a.download = canvasState.sessionid + ".jpeg";
@@ -60,6 +59,13 @@ const Toolbar = () => {
     toolState.setStrokeColor("white");
   };
 
+  const setLine = () => {
+    toolState.setTool(
+      new Line(canvasState.canvas, canvasState.socket, canvasState.sessionid),
+    );
+    toolState.setStrokeColor(document.getElementById("strokecolor").value);
+  };
+
   return (
     <div className="toolbar">
       <button className="toolbar__btn brush" onClick={setBrush}></button>
@@ -71,18 +77,7 @@ const Toolbar = () => {
       ></button>
       <button className="toolbar__btn eraser" onClick={setEraser}></button>
 
-      <button
-        className="toolbar__btn "
-        onClick={() =>
-          toolState.setTool(
-            new Line(
-              canvasState.canvas,
-              canvasState.socket,
-              canvasState.sessionid,
-            ),
-          )
-        }
-      ></button>
+      <button className="toolbar__btn line" onClick={setLine}></button>
 
       <button
         className="toolbar__btn undo"
