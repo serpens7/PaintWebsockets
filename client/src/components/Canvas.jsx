@@ -103,6 +103,7 @@ const Canvas = observer(() => {
           figure.height,
           figure.color,
           figure.stroke,
+          figure.lineWidth,
         );
         break;
       case "circle":
@@ -113,6 +114,7 @@ const Canvas = observer(() => {
           figure.radius,
           figure.color,
           figure.stroke,
+          figure.lineWidth,
         );
         break;
       case "emptyCircle":
@@ -122,10 +124,22 @@ const Canvas = observer(() => {
           figure.y,
           figure.radius,
           figure.stroke,
+          figure.lineWidth,
         );
         break;
       case "eraser":
-        Eraser.eraserDraw(ctx, figure.x, figure.y, "white");
+        Eraser.eraserDraw(ctx, figure.x, figure.y, "white", figure.lineWidth);
+        break;
+      case "line":
+        Line.drawLine(
+          ctx,
+          figure.x,
+          figure.y,
+          figure.x1,
+          figure.y1,
+          figure.stroke,
+          figure.lineWidth,
+        );
         break;
       case "finish":
         ctx.beginPath();

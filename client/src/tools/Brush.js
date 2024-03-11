@@ -32,7 +32,23 @@ export default class Brush extends Tool {
       e.pageY - e.target.offsetTop,
     );
   }
+
   mouseMoveHandler(e) {
+    try {
+      if (!this.mouseDown) {
+        this.socket.send(
+          JSON.stringify({
+            method: "draw",
+            id: this.id,
+            figure: {
+              type: "finish",
+            },
+          }),
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
     if (this.mouseDown) {
       // this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
       this.socket.send(
@@ -44,14 +60,16 @@ export default class Brush extends Tool {
             x: e.pageX - e.target.offsetLeft,
             y: e.pageY - e.target.offsetTop,
             color: this.ctx.strokeStyle,
+            lineWidth: this.ctx.lineWidth,
           },
         }),
       );
     }
   }
 
-  static draw(ctx, x, y, color) {
+  static draw(ctx, x, y, color, lineWidth) {
     ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
     ctx.lineTo(x, y);
     ctx.stroke();
   }
